@@ -28,19 +28,26 @@ const Buffer = () => {
 const Creator= () => {
 	const [text, setText] = useState('');
 	const [number, setNumber] = useState('');
-	const [output, setOutput] = useState('');
+	const [output, setOutput] = useState([]);
 
-	function MakeOutput() {
-		var temp = ""
-		for(let i = 0; i < Number(number); i++) {
-			temp += " "+text
+	function content() {
+		var temp = []
+		var repeats = Math.floor(Number(number) / 5);
+		var leftover = Number(number) % 5
+		if(Number(number) > 5) {
+			for(let i = 0; i < repeats; i++) {
+				temp.push(Row(5, text))
+			}
 		}
+		temp.push(Row(leftover, text))
 		setOutput(temp)
 	}
 
 	return (
 		<View style={styles.container}>
-			<Text>{output}</Text>
+			<View style={styles.grid}>
+				{output}
+			</View>
 			<TextInput
 				placeholder="Type something..."
 				onChangeText={setText}
@@ -48,14 +55,14 @@ const Creator= () => {
 				style={styles.input}
       		/>
 			<TextInput
-				placeholder="Type something..."
+				placeholder="Number"
 				onChangeText={setNumber}
 				value={number}
 				keyboardType="numeric"
 				style={styles.input}
       		/>
 			<Button 
-				onPress={MakeOutput}
+				onPress={content}
 				title="output"
 				color="#fff0000f"
 			/>
@@ -63,7 +70,19 @@ const Creator= () => {
 	);
 }
 
+const Row = (number: number, content: String) => {
+	
+	const texts = (content: String) => {
+		const temp = []
+		for(let i = 0; i < number; i++) temp.push(<Text>{" "+content+" "}</Text>)
+		return temp
+	}
 
+ 	return(
+		<Text style={styles.row}> {texts(content)} </Text>
+	);
+
+}
 
 const styles = StyleSheet.create({
 	main: {
@@ -93,5 +112,14 @@ const styles = StyleSheet.create({
 		height: '10%',
 		backgroundColor: '#ff00000f',
 		textAlign: 'center'
+	},
+	grid: {
+		flex: 0.5,
+		backgroundColor: '#0000000f',
+		justifyContent: 'center'
+	},
+	row: {
+		flex: 0.2,
+		flexDirection: 'row'
 	}
 })
